@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ying-Hul - GitHub 儲存庫展示首頁</title>
+    
+    <!-- Google 字型引入：提高排版美感 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide 圖標引入：輕量且美觀 -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* 設計系統與 CSS 變數定義 */
+        :root {
+            --bg-gradient: radial-gradient(circle at 50% 50%, #12131c 0%, #08090d 100%);
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.06);
+            --card-border-hover: rgba(255, 255, 255, 0.15);
+            --primary: #818cf8; /* 靛藍色 */
+            --primary-gradient: linear-gradient(135deg, #a78bfa 0%, #818cf8 50%, #6366f1 100%);
+            --accent-cyan: #22d3ee;
+            --accent-pink: #f472b6;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --glow-color: rgba(99, 102, 241, 0.15);
+        }
+
+        /* 重設與基本樣式 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            padding-bottom: 80px;
+        }
+
+        /* 頂部裝飾背景動態光球 */
+        .glow-orb {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(129, 140, 248, 0.12) 0%, rgba(99, 102, 241, 0) 70%);
+            top: -100px;
+            left: 10%;
+            z-index: 0;
+            pointer-events: none;
+            animation: float 15s ease-in-out infinite alternate;
+        }
+
+        .glow-orb-2 {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(34, 211, 238, 0.08) 0%, rgba(34, 211, 238, 0) 70%);
+            bottom: 10%;
+            right: -100px;
+            z-index: 0;
+            pointer-events: none;
+            animation: float 20s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) scale(1); }
+            100% { transform: translateY(50px) scale(1.1); }
+        }
+
+        /* 容器排版 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 個人資訊區塊 (Hero / Profile Card) */
+        .profile-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 40px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            flex-shrink: 0;
+        }
+
+        .avatar-container::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            z-index: -1;
+            padding: 4px;
+            animation: spin 8s linear infinite;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        .profile-avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #0c0d14;
+        }
+
+        .profile-info {
+            flex-grow: 1;
+        }
+
+        .profile-name {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff 50%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 6px;
+        }
+
+        .profile-username {
+            font-size: 1rem;
+            color: var(--primary);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 16px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .profile-username:hover {
+            color: var(--accent-cyan);
+        }
+
+        .profile-bio {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 24px;
+            max-width: 600px;
+        }
+
+        .profile-meta-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .profile-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* 統計資訊面板 */
+        .stats-panel {
+            display: flex;
+            gap: 24px;
+            flex-shrink: 0;
+            border-left: 1px solid var(--card-border);
+            padding-left: 40px;
+        }
+
+        .stat-box {
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .stat-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* 控制面板 (搜尋、篩選、排序) */
+        .controls-container {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 24px;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .search-row {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .search-wrapper {
+            position: relative;
+            flex-grow: 1;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+            width: 18px;
+            height: 18px;
+        }
+
+        .search-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 14px 16px 14px 48px;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 12px var(--glow-color);
+        }
+
+        .sort-select {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 14px 20px;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            cursor: pointer;
+            min-width: 160px;
+            transition: all 0.3s;
+        }
+
+        .sort-select:focus {
+            border-color: var(--primary);
+        }
+
+        /* 語言篩選按鈕區 */
+        .filter-languages {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--card-border);
+            border-radius: 30px;
+            padding: 8px 16px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover {
+            color: #fff;
+            border-color: var(--card-border-hover);
+            transform: translateY(-1px);
+        }
+
+        .filter-btn.active {
+            background: var(--primary-gradient);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(129, 140, 248, 0.2);
+        }
+
+        /* 儲存庫卡片網格 */
+        .repos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 24px;
+        }
+
+        /* 單個儲存庫卡片 */
+        .repo-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            min-height: 240px;
+            position: relative;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        .repo-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .repo-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--card-border-hover);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.25), 0 0 15px var(--glow-color);
+        }
+
+        .repo-card:hover::after {
+            background: var(--primary-gradient);
+        }
+
+        .repo-title-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            gap: 12px;
+        }
+
+        .repo-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.2s;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .repo-title:hover {
+            color: var(--primary);
+        }
+
+        .repo-badge {
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(129, 140, 248, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(129, 140, 248, 0.2);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .repo-desc {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 24px;
+            flex-grow: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .repo-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: auto;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .repo-meta-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        .repo-lang {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        .lang-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .repo-stat-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .repo-links {
+            display: flex;
+            gap: 12px;
+        }
+
+        .repo-link-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .repo-link-btn:hover {
+            color: #fff;
+            border-color: var(--primary);
+            background: rgba(129, 140, 248, 0.1);
+        }
+
+        /* Skeleton 骨架屏載入樣式 */
+        .skeleton {
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0.03) 25%,
+                rgba(255, 255, 255, 0.08) 37%,
+                rgba(255, 255, 255, 0.03) 63%
+            );
+            background-size: 400% 100%;
+            animation: skeleton-loading 1.4s ease infinite;
+        }
+
+        @keyframes skeleton-loading {
+            0% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .skeleton-avatar { width: 140px; height: 140px; border-radius: 50%; }
+        .skeleton-text { height: 16px; border-radius: 4px; margin-bottom: 10px; }
+        .skeleton-title { height: 28px; width: 60%; border-radius: 6px; margin-bottom: 12px; }
+        .skeleton-btn { height: 32px; width: 80px; border-radius: 16px; }
+
+        /* 頁尾 */
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 60px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 30px;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* 響應式排版調整 */
+        @media (max-width: 900px) {
+            .profile-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 24px;
+                padding: 30px;
+            }
+            .profile-meta-list {
+                justify-content: center;
+            }
+            .stats-panel {
+                border-left: none;
+                border-top: 1px solid var(--card-border);
+                padding-left: 0;
+                padding-top: 24px;
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .search-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .sort-select {
+                width: 100%;
+            }
+            .repos-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glow-orb"></div>
+    <div class="glow-orb-2"></div>
+
+    <div class="container">
+        
+        <!-- 個人簡介區塊 (預設骨架屏，後續透過 JS 填充資料) -->
+        <header id="profile-container">
+            <div class="profile-card">
+                <div class="avatar-container">
+                    <div class="skeleton-avatar skeleton"></div>
+                </div>
+                <div class="profile-info" style="width: 100%;">
+                    <div class="skeleton-title skeleton"></div>
+                    <div class="skeleton-text skeleton" style="width: 30%;"></div>
+                    <div class="skeleton-text skeleton" style="width: 80%; margin-top: 20px;"></div>
+                    <div class="skeleton-text skeleton" style="width: 70%;"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- 控制面板 -->
+        <section class="controls-container">
+            <div class="search-row">
+                <div class="search-wrapper">
+                    <i data-lucide="search" class="search-icon"></i>
+                    <input type="text" id="search-input" class="search-input" placeholder="搜尋儲存庫名稱或關鍵字...">
+                </div>
+                <select id="sort-select" class="sort-select">
+                    <option value="updated">最近更新</option>
+                    <option value="stars">最多星星 (Stars)</option>
+                    <option value="forks">最多 Fork</option>
+                    <option value="name">專案名稱 (A-Z)</option>
+                </select>
+            </div>
+            
+            <!-- 程式語言篩選區 -->
+            <div class="filter-languages" id="languages-container">
+                <!-- 由 JS 動態生成按鈕 -->
+            </div>
+        </section>
+
+        <!-- 儲存庫展示網格 (預設骨架屏) -->
+        <main class="repos-grid" id="repos-container">
+            <!-- 預設生成 6 個骨架卡片 -->
+            <div class="repo-card">
+                <div class="skeleton-title skeleton" style="width: 70%;"></div>
+                <div class="skeleton-text skeleton" style="width: 90%; height: 14px;"></div>
+                <div class="skeleton-text skeleton" style="width: 80%; height: 14px;"></div>
+                <div class="repo-footer">
+                    <div class="skeleton-btn skeleton"></div>
+                    <div class="skeleton-btn skeleton" style="width: 36px;"></div>
+                </div>
+            </div>
+            <div class="repo-card">
+                <div class="skeleton-title skeleton" style="width: 50%;"></div>
+                <div class="skeleton-text skeleton" style="width: 90%; height: 14px;"></div>
+                <div class="skeleton-text skeleton" style="width: 60%; height: 14px;"></div>
+                <div class="repo-footer">
+                    <div class="skeleton-btn skeleton"></div>
+                    <div class="skeleton-btn skeleton" style="width: 36px;"></div>
+                </div>
+            </div>
+            <div class="repo-card">
+                <div class="skeleton-title skeleton" style="width: 80%;"></div>
+                <div class="skeleton-text skeleton" style="width: 95%; height: 14px;"></div>
+                <div class="skeleton-text skeleton" style="width: 40%; height: 14px;"></div>
+                <div class="repo-footer">
+                    <div class="skeleton-btn skeleton"></div>
+                    <div class="skeleton-btn skeleton" style="width: 36px;"></div>
+                </div>
+            </div>
+        </main>
+
+        <!-- 頁尾 -->
+        <footer>
+            <p>© <span id="current-year"></span> <a href="https://github.com/Ying-Hul" target="_blank">Ying-Hul</a>. All Rights Reserved.</p>
+            <p style="margin-top: 8px; font-size: 0.75rem;">Created with ❤️ by Antigravity</p>
+        </footer>
+
+    </div>
+
+    <script>
+        const USERNAME = 'Ying-Hul';
+        const API_USER = `https://api.github.com/users/${USERNAME}`;
+        const API_REPOS = `https://api.github.com/users/${USERNAME}/repos?per_page=100`;
+
+        let reposData = [];
+        let activeLanguage = 'All';
+
+        // 程式語言的專屬配色表，提供精緻的視覺感
+        const LANG_COLORS = {
+            'JavaScript': '#f1e05a',
+            'TypeScript': '#3178c6',
+            'HTML': '#e34c26',
+            'CSS': '#563d7c',
+            'Python': '#3572A5',
+            'Go': '#00ADD8',
+            'Java': '#b07219',
+            'C++': '#f34b7d',
+            'C#': '#178600',
+            'Ruby': '#701516',
+            'PHP': '#4F5D95',
+            'Swift': '#F05138',
+            'Kotlin': '#A97BFF',
+            'Rust': '#dea584',
+            'Vue': '#41b883',
+            'React': '#61dafb'
+        };
+
+        // 取得年份設定到頁尾
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // 頁面初始化
+        window.addEventListener('DOMContentLoaded', () => {
+            fetchUserProfile();
+            fetchUserRepos();
+            setupEventListeners();
+        });
+
+        // 串接 GitHub API 獲取個人檔案
+        async function fetchUserProfile() {
+            try {
+                const response = await fetch(API_USER);
+                if (!response.ok) throw new Error('無法讀取使用者檔案');
+                const user = await response.json();
+                renderUserProfile(user);
+            } catch (error) {
+                console.error(error);
+                renderUserProfileError();
+            }
+        }
+
+        // 串接 GitHub API 獲取儲存庫
+        async function fetchUserRepos() {
+            try {
+                const response = await fetch(API_REPOS);
+                if (!response.ok) throw new Error('無法讀取儲存庫資料');
+                reposData = await response.json();
+                
+                // 過濾掉 Fork 的專案，只留下自己的專案以達到介紹效果（或者也可以選擇全部保留）
+                // 這裡我們保留全部專案，但以 badge 標示是否為 fork
+                
+                renderLanguageFilters();
+                filterAndRenderRepos();
+            } catch (error) {
+                console.error(error);
+                renderReposError();
+            }
+        }
+
+        // 渲染個人檔案資訊
+        function renderUserProfile(user) {
+            const container = document.getElementById('profile-container');
+            
+            // 計算社交與主要資訊
+            const bioText = user.bio ? user.bio : "這位開發者很神秘，還沒有填寫個人簡介。";
+            const blogLink = user.blog ? `<div class="profile-meta-item"><i data-lucide="link"></i><a href="${user.blog.startsWith('http') ? user.blog : 'https://' + user.blog}" target="_blank" style="color: inherit; text-decoration: none;">${user.blog}</a></div>` : '';
+            const locationInfo = user.location ? `<div class="profile-meta-item"><i data-lucide="map-pin"></i><span>${user.location}</span></div>` : '';
+            const companyInfo = user.company ? `<div class="profile-meta-item"><i data-lucide="briefcase"></i><span>${user.company}</span></div>` : '';
+
+            container.innerHTML = `
+                <div class="profile-card">
+                    <div class="avatar-container">
+                        <img src="${user.avatar_url}" alt="${user.name || user.login}" class="profile-avatar">
+                    </div>
+                    <div class="profile-info">
+                        <h1 class="profile-name">${user.name || user.login}</h1>
+                        <a href="${user.html_url}" target="_blank" class="profile-username">
+                            @${user.login} <i data-lucide="external-link" style="width: 14px; height: 14px;"></i>
+                        </a>
+                        <p class="profile-bio">${bioText}</p>
+                        <div class="profile-meta-list">
+                            ${locationInfo}
+                            ${companyInfo}
+                            ${blogLink}
+                        </div>
+                    </div>
+                    <div class="stats-panel">
+                        <div class="stat-box">
+                            <div class="stat-value">${user.public_repos}</div>
+                            <div class="stat-label">儲存庫</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">${user.followers}</div>
+                            <div class="stat-label">關注者</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">${user.following}</div>
+                            <div class="stat-label">關注中</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // 重新初始化 Lucide 圖標
+            lucide.createIcons();
+        }
+
+        // 渲染個人檔案錯誤處理
+        function renderUserProfileError() {
+            const container = document.getElementById('profile-container');
+            container.innerHTML = `
+                <div class="profile-card" style="border-color: rgba(239, 68, 68, 0.4);">
+                    <div class="profile-info">
+                        <h1 class="profile-name" style="color: #ef4444; -webkit-text-fill-color: initial;">載入失敗</h1>
+                        <p class="profile-bio">無法載入 GitHub 使用者 ${USERNAME} 的資料。請確認網路連線或 API 限制。</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 渲染語言篩選按鈕
+        function renderLanguageFilters() {
+            const container = document.getElementById('languages-container');
+            
+            // 取得所有語言與計數
+            const langs = {};
+            reposData.forEach(repo => {
+                if (repo.language) {
+                    langs[repo.language] = (langs[repo.language] || 0) + 1;
+                }
+            });
+
+            // 排序語言，依專案數高低排序
+            const sortedLangs = Object.keys(langs).sort((a, b) => langs[b] - langs[a]);
+            
+            let html = `<button class="filter-btn active" data-lang="All">全部 (All)</button>`;
+            sortedLangs.forEach(lang => {
+                html += `<button class="filter-btn" data-lang="${lang}">${lang} (${langs[lang]})</button>`;
+            });
+
+            container.innerHTML = html;
+
+            // 註冊語言按鈕點擊事件
+            container.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    container.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    activeLanguage = e.target.getAttribute('data-lang');
+                    filterAndRenderRepos();
+                });
+            });
+        }
+
+        // 篩選與渲染儲存庫
+        function filterAndRenderRepos() {
+            const container = document.getElementById('repos-container');
+            const searchQuery = document.getElementById('search-input').value.toLowerCase();
+            const sortBy = document.getElementById('sort-select').value;
+
+            // 1. 篩選
+            let filtered = reposData.filter(repo => {
+                const matchesSearch = repo.name.toLowerCase().includes(searchQuery) || 
+                                     (repo.description && repo.description.toLowerCase().includes(searchQuery));
+                const matchesLanguage = activeLanguage === 'All' || repo.language === activeLanguage;
+                return matchesSearch && matchesLanguage;
+            });
+
+            // 2. 排序
+            filtered.sort((a, b) => {
+                if (sortBy === 'stars') {
+                    return b.stargazers_count - a.stargazers_count;
+                } else if (sortBy === 'forks') {
+                    return b.forks_count - a.forks_count;
+                } else if (sortBy === 'name') {
+                    return a.name.localeCompare(b.name);
+                } else { // updated
+                    return new Date(b.updated_at) - new Date(a.updated_at);
+                }
+            });
+
+            // 3. 渲染
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-muted);">
+                        <i data-lucide="folder-open" style="width: 48px; height: 48px; margin-bottom: 16px; opacity: 0.5;"></i>
+                        <p>找不到符合條件的儲存庫</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            let html = '';
+            filtered.forEach(repo => {
+                const isForkBadge = repo.fork ? `<span class="repo-badge">Fork</span>` : '';
+                const langColor = LANG_COLORS[repo.language] || '#9ca3af';
+                const langSection = repo.language ? `
+                    <div class="repo-lang">
+                        <span class="lang-dot" style="background-color: ${langColor};"></span>
+                        <span>${repo.language}</span>
+                    </div>
+                ` : '';
+
+                // 格式化最後更新時間
+                const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
+                const formattedDate = new Date(repo.updated_at).toLocaleDateString('zh-TW', dateOptions);
+
+                const homepageBtn = repo.homepage ? `
+                    <a href="${repo.homepage.startsWith('http') ? repo.homepage : 'https://' + repo.homepage}" target="_blank" class="repo-link-btn" title="專案網站">
+                        <i data-lucide="globe" style="width: 18px; height: 18px;"></i>
+                    </a>
+                ` : '';
+
+                const descText = repo.description || "這個專案沒有填寫描述。";
+
+                html += `
+                    <article class="repo-card">
+                        <div class="repo-title-row">
+                            <a href="${repo.html_url}" target="_blank" class="repo-title" title="${repo.name}">
+                                <i data-lucide="folder" style="width: 18px; height: 18px; color: var(--primary);"></i>
+                                ${repo.name}
+                            </a>
+                            ${isForkBadge}
+                        </div>
+                        <p class="repo-desc">${descText}</p>
+                        <div class="repo-footer">
+                            <div class="repo-meta-left">
+                                ${langSection}
+                                <div class="repo-stat-item">
+                                    <i data-lucide="star" style="width: 14px; height: 14px; fill: rgba(255,255,255,0.05);"></i>
+                                    <span>${repo.stargazers_count}</span>
+                                </div>
+                                <div class="repo-stat-item">
+                                    <i data-lucide="git-fork" style="width: 14px; height: 14px;"></i>
+                                    <span>${repo.forks_count}</span>
+                                </div>
+                            </div>
+                            <div class="repo-links">
+                                ${homepageBtn}
+                                <a href="${repo.html_url}" target="_blank" class="repo-link-btn" title="查看 GitHub 程式庫">
+                                    <i data-lucide="github" style="width: 18px; height: 18px;"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            });
+
+            container.innerHTML = html;
+            
+            // 重新初始化 Lucide 圖標
+            lucide.createIcons();
+        }
+
+        // 渲染儲存庫錯誤處理
+        function renderReposError() {
+            const container = document.getElementById('repos-container');
+            container.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: #ef4444;">
+                    <i data-lucide="alert-triangle" style="width: 48px; height: 48px; margin-bottom: 16px;"></i>
+                    <p>載入儲存庫時發生錯誤，請稍後再試。</p>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        // 設定控制列事件監聽器
+        function setupEventListeners() {
+            const searchInput = document.getElementById('search-input');
+            const sortSelect = document.getElementById('sort-select');
+
+            // 搜尋輸入防抖 (Debounce)
+            let debounceTimer;
+            searchInput.addEventListener('input', () => {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
+                    filterAndRenderRepos();
+                }, 300);
+            });
+
+            // 排序選擇變更
+            sortSelect.addEventListener('change', () => {
+                filterAndRenderRepos();
+            });
+        }
+    </script>
+</body>
+</html>
